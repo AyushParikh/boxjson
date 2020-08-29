@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Cache-control" content="public" />
+		<meta
+			name="viewport"
+			content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+		/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="description" content="A free HTTP based JSON storage" />
+		<meta name="keywords" content="json storage, json database, http" />
+		<meta property="og:title" content="jsonbox.io" />
+		<meta property="og:description" content="A free HTTP based JSON storage" />
+		<script src="https://kit.fontawesome.com/d2f1016e6f.js" crossorigin="anonymous"></script>
+		<link rel="shortcut icon" href="img/favicon.ico" />
+		<link rel="icon" href="icon.svg" sizes="any" type="image/svg+xml" />
+		<title>jsontable.io | A Free HTTP based JSON storage</title>
+        <link href="lib/style.css" rel="stylesheet" />
+        <script src="lib/main.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<section id="home">
+			<div class="wrapper">
+				<a href="/" style="text-decoration: none;"><h1 id="title">
+					<span>jsontable.io</span>
+                </h1></a>
+				<h3 id="subtitle">A free HTTP based JSON storage</h3>
+				<p>
+					<strong>jsontable.io</strong> - Documentation
+				</p>
+				<p>
+					Power your website with easy to use JSON Tables.
+                </p>
+                <a href="new" class="btn" data-wipe="Generate JSON Table">Generate JSON Table</a>
+                <div>
+                    <h2>API Documentation</h2>
+                        <a id="button" onclick="(function(){ location.replace('/api'); return false; })();return false;"></a>
+                        <script>
+                            var btn = $('#button');
+
+                            $(window).scroll(function() {
+                                if ($(window).scrollTop() > 300) {
+                                    btn.addClass('show');
+                                } else {
+                                    btn.removeClass('show');
+                                }
+                            });
+                        </script>
+                        <div>
+                            <a href="#insert" class="btn" data-wipe="Insert Table">Insert Table</a>
+                            <a href="#drop" class="btn" data-wipe="Drop Table">Drop Table</a>
+                            <a href="#find" class="btn" data-wipe="Find In Table">Find In Table</a>
+                            <a href="#findOneAndDelete" class="btn" data-wipe="find One And Delete">find One And Delete</a>
+                        </div>
+                        <h3 id="insert"><b>Insert Table</b></h3>
+                        <p style="word-wrap: break-word">You can insert a record to a jsonbox by using HTTP POST to: <b>/api/insert/${DBNAME}/${PASSWORD}</b></p>
+                        <p><u>Example request JSON body:</u></p>
+                        <pre style="word-wrap: break-word">
+{
+    "title":  "Harry Potter",
+    "author": "JK Rowling",
+    "body":   "Once Upon a time",
+    "info": { 
+        "id": 198, 
+        "publisher": "Ayush" 
+    },
+    "hidden": false,
+    "meta": {
+        "votes": 152,
+        "price":  45.89
+    }
+}
+                        </pre>
+                        <p><u>Example response JSON body:</u></p>
+                        <pre style="word-wrap: break-word">
+{
+    "status": "OK"
+}
+
+{
+    "status": "Incorrect Password"
+}
+
+{
+    "status": "Could not find table"
+}
+
+{
+    "status": "Something went wrong with getting database name or password."
+}
+                        </pre>
+                        <h3 id="drop"><b>Drop Table</b></h3>
+                        <p style="word-wrap: break-word">You can insert a record to a jsonbox by using HTTP POST to: <b>/api/drop/${DBNAME}/${PASSWORD}</b></p>
+                        <p><u>Example response JSON body:</u></p>
+                        <pre>
+{ 
+    status : "OK" 
+}
+
+{ 
+    status : "Incorrect password" 
+}
+
+{ 
+    status : "Could not drop table." 
+}
+
+{ 
+    status : "Something went wrong with getting database name or password." 
+}
+                        </pre>
+                        <h3 id="find"><b>Find In Table</b></h3>
+                        <p style="word-wrap: break-word">You can insert a record to a jsonbox by using HTTP POST to: <b>/api/find/${DBNAME}/${PASSWORD}</b></p>
+                        <p><u>Example request JSON body:</u></p>
+                        <pre>
+{
+    "title" : "Harry Potter",
+    "author" : "JK Rowling"
+}
+
+{
+    //empty request will return all records
+}
+                        </pre>
+                        <p><u>Example response JSON body:</u></p>
+                        <pre>
+//Your response record. List of records.
+[
+    {
+        "info": {
+            "id": 198,
+            "publisher": "Timothy"
+        },
+        "meta": {
+            "votes": 152,
+            "price": 45.89
+        },
+        "_id": "5f375719ac9781001e5d7c74",
+        "title": "Harry Potter",
+        "author": "JK Rowling",
+        "body": "Once Upon a time",
+        "hidden": false,
+        "__v": 0
+    }
+]
+
+{ 
+    status : "Could not query table." 
+}
+                        </pre>
+                        <h3 id="findOneAndDelete"><b>Find One And Delete</b></h3>
+                        <p style="word-wrap: break-word">You can insert a record to a jsonbox by using HTTP POST to: <b>/api/findOneAndDelete/${DBNAME}/${PASSWORD}</b></p>
+                        <p><u>Example request JSON body:</u></p>
+                        <pre>
+{
+    "title" : "Harry Potter"
+}
+                        </pre>
+                        <p><u>Example response JSON body:</u></p>
+                        <pre>
+//Item removed
+{
+    "info": {
+        "id": 4324324,
+        "publisher": "Ayush"
+    },
+    "meta": {
+        "votes": 4324324234,
+        "price": 432849032
+    },
+    "_id": "5f375719ac9781001e5d7c74",
+    "title": "Harry Potter",
+    "author": "JK Rowling",
+    "body": "Once Upon a time",
+    "hidden": false,
+    "__v": 0
+}
+
+//No items removed
+null
+
+{ 
+    status : "Could not find and remove from table." 
+}
+
+{ 
+    status : "Incorrect password" 
+}
+
+{ 
+    status : "Something went wrong with getting database name, password or parameters" 
+}
+                        </pre>
+                </div>
+			</div>
+		</section>
+	</body>
+</html>
