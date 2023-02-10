@@ -1,116 +1,38 @@
-function newtable(){
-    var dbname = document.getElementById("dbname").value;
-    var password = document.getElementById("password").value;
-    var confpassword = document.getElementById("confpassword").value;
+async function generate(){
+    var company_name = document.getElementById("company_name").value;
+    var job_role = document.getElementById("job_role").value;
 
-    if (password !== confpassword){
+    if (!company_name){
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Passwords do not match'
+            text: 'Enter a company name'
         })
-    } else if (password.length <= 5) {
+        return
+    }
+    if (!job_role) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Password must be 6 characters or longer.'
+            text: 'Enter a job role.'
         })
-    } else {
+        return
+    } 
 
-        $.ajax({
-            method: "POST",
-            url: "/api/checkdbname/",
-            data: {
-                dbname: dbname
-            },
-            success: function(data){
-                console.log(data)
-                var divinfo = document.getElementById("infodiv");
-                divinfo.style.display = "none";
-        
-                var divmodel = document.getElementById("divmodel");
-                divmodel.style.display = "block";
-            },
-            error: function (err){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'That database name is taken.'
-                })
-            }
-        });
-    }
-}
+    document.getElementById("modal-loading").style.display = "block"
 
-
-
-function checkSchema(schema){
-    for (let key in schema){
-        var child = schema[key];
-        if (typeof(child) !== "object"){
-            if (child.toUpperCase() === "STRING" || child.toUpperCase() === "NUMBER" || child.toUpperCase() === "BOOLEAN"){
-
-            } else {
-                return false
-            }
-        } else {
-            if (checkSchema(child) == false){
-                return false
-            }
-        }
-    }
-    return true
-}
-
-function deploySchema(dbname, password, schema){
-    $.ajax({
-        method: "POST",
-        url: "/api/createdatabase/",
-        data: {
-            dbname: dbname,
-            password: password, 
-            schema: schema
-        },
-        success: function(data){
-            window.location.href = "db/"+dbname;
-        },
-        error: function (err){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: err.responseText
-            })
-        }
+    let formData = new FormData(); 
+    formData.append("resume", resume.files[0]);
+    formData.append("company_name", company_name);
+    formData.append("job_role", job_role);
+    result = await fetch('/api/generate/', {
+      method: "POST", 
+      body: formData,
+    }).then((response) => response.json())
+    .then((messages) => {
+        var cover_letter = messages.data;
+        document.getElementById("modal-loading").style.display = "none"
+        document.getElementById("text-wrap").style.display = "block";
+        document.getElementById("cover_letter").innerHTML = cover_letter;
     });
 }
-
-
-function verifyJSON(){
-    var schema = document.getElementById("schemaArea").value;
-    try {
-        JSON.parse(schema);
-        if (checkSchema(JSON.parse(schema))){
-            document.getElementById("schemaArea").value = JSON.stringify(JSON.parse(schema), null, "\t");
-            deploySchema(document.getElementById("dbname").value, document.getElementById("password").value, JSON.parse(schema));
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Please enter a valid schema structure.',
-                footer : "<b>Make sure you have double quoted each key and variable and are using the supported data types. String, Number, Boolean</b>"
-            })
-        }
-    } catch (error) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Please enter a valid schema structure.',
-            footer : "<b>Make sure you have double quoted each key and variable and are using the supported data types. String, Number, Boolean</b>"
-        })
-    }
-}
-
-function deploy(){
-    verifyJSON()
-}
-

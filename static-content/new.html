@@ -16,7 +16,7 @@
 		<script src="https://kit.fontawesome.com/d2f1016e6f.js" crossorigin="anonymous"></script>
 		<link rel="shortcut icon" href="img/favicon.ico" />
 		<link rel="icon" href="icon.svg" sizes="any" type="image/svg+xml" />
-		<title>jsontable.io | A Free HTTP based JSON storage</title>
+		<title>ezcover.ai | AI Generated Cover Letters</title>
         <link href="lib/style.css" rel="stylesheet" />
         <script src="lib/main.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -27,74 +27,29 @@
 		<section id="home">
 			<div id="infodiv" class="wrapper" style="text-align: center;">
 				<a href="/" style="text-decoration: none;"><h1 id="title">
-					<span>jsontable.io</span>
+					<span>ezcover.ai</span>
                 </h1></a><br>
-                <h3>create your <b>json</b> table</h3>
-                <input id="dbname" type="text" placeholder="Please enter a database name"><br>
-                <input id="password" type="password" placeholder="Create your secret password"><br>
-                <input id="confpassword" type="password" placeholder="Confirm your secret password"><br><br>
-                <a id="nextbtn" onclick="newtable()" class="btn" data-wipe="Next">Next</a>
+                <h3>create your <b>AI Generated</b> cover letter</h3>
+                <input type="file"
+                    id="resume" name="resume" /><br>
+                <input id="company_name" type="text" placeholder="What is the company name?"><br>
+                <input id="job_role" type="text" placeholder="What is the job role?"><br><br>
+                <a id="nextbtn" onclick="generate()" class="btn" data-wipe="Generate">Generate</a><br><br>
+                <div class="text-wrap" style="display: none;" id="text-wrap">
+                    <textarea id="cover_letter"></textarea>
+                    <div id="copyToClipboard-a" class="clipboard icon"></div>
+                </div>
+                <div class="modal" id="modal-loading" data-backdrop="static" style="display: none;">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+                        <div class="modal-body text-center">
+                          <div class="loading-spinner mb-2"></div>
+                           <div>Loading</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
             </div>
-            
-            <div id="divmodel" class="wrapper" style="text-align: center; display: none;">
-				<a href="/" style="text-decoration: none;"><h1 id="title">
-					<span>jsontable.io</span>
-                </h1></a><br>
-                <h3>construct your <b>schema</b></h3>
-
-                <textarea name="" id="schemaArea" cols="30" rows="10" 
-                placeholder='Please enter a schema in JSON format. An example is shown below. The supported datatypes are:
-
-    - String
-    - Number
-    - Boolean
-
-
-{
-    "title":  "String",
-    "author": "String",
-    "body":   "String",
-    "info": { 
-        "id": "Number", 
-        "publisher": "String" 
-    },
-    "hidden": "Boolean",
-    "meta": {
-        "votes": "Number",
-        "price":  "Number"
-    }
-}'
-                ></textarea>
-                <br><br>
-                <a id="deploybtn" onclick="deploy()" class="btn" data-wipe="Deploy">Deploy</a>
-            </div>
-            <script>
-                var input = document.getElementById("confpassword");
-
-                // Execute a function when the user releases a key on the keyboard
-                input.addEventListener("keyup", function(event) {
-                    // Number 13 is the "Enter" key on the keyboard
-                    if (event.keyCode === 13) {
-                        // Cancel the default action, if needed
-                        event.preventDefault();
-                        // Trigger the button element with a click
-                        document.getElementById("nextbtn").click();
-                    }
-                });
-
-                var input2 = document.getElementById("schemaArea");
-
-                // Execute a function when the user releases a key on the keyboard
-                input2.addEventListener("keyup", function(event) {
-                    // Number 13 is the "Enter" key on the keyboard
-                    if (event.keyCode === 13) {
-                        // Cancel the default action, if needed
-                        event.preventDefault();
-                        // Trigger the button element with a click
-                        document.getElementById("deploybtn").click();
-                    }
-                });
-            </script>
 		</section>
     </body>
 </html>
